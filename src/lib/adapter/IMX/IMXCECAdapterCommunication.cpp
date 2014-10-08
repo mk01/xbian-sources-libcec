@@ -209,6 +209,7 @@ cec_vendor_id CIMXCECAdapterCommunication::GetVendorId(void)
 uint16_t CIMXCECAdapterCommunication::GetPhysicalAddress(void)
 {
   uint8_t phy_addr[4];
+  uint16_t pa_tmp;
 
   if (m_dev->Ioctl(HDMICEC_IOC_GETPHYADDRESS, &phy_addr) != 0)
   {
@@ -216,7 +217,9 @@ uint16_t CIMXCECAdapterCommunication::GetPhysicalAddress(void)
     return CEC_INVALID_PHYSICAL_ADDRESS; 
   }
 
-  m_physicalAddress = ((phy_addr[0] << 4 | phy_addr[1]) << 8) | (phy_addr[2] << 4 | phy_addr[3]);
+  if ((pa_tmp = ((phy_addr[0] << 4 | phy_addr[1]) << 8) | (phy_addr[2] << 4 | phy_addr[3])))
+    m_physicalAddress = pa_tmp;
+
   return m_physicalAddress;
 }
 
