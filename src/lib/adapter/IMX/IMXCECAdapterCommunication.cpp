@@ -56,11 +56,11 @@ using namespace PLATFORM;
 
 CIMXCECAdapterCommunication::CIMXCECAdapterCommunication(IAdapterCommunicationCallback *callback) :
     IAdapterCommunication(callback)
-{ 
+{
   CLockObject lock(m_mutex);
 
   m_iNextMessage = 0;
-  m_logicalAddress = CECDEVICE_UNKNOWN; 
+  m_logicalAddress = CECDEVICE_UNKNOWN;
   m_bLogicalAddressRegistered = false;
   m_bInitialised = false;
   m_dev = new CCDevSocket(CEC_IMX_PATH);
@@ -246,28 +246,26 @@ bool CIMXCECAdapterCommunication::UnregisterLogicalAddress(void)
       return true;
   }
 
-  if (m_dev->Ioctl(HDMICEC_IOC_SETLOGICALADDRESS, (void *)CECDEVICE_BROADCAST) != 0)
-  {
-    LIB_CEC->AddLog(CEC_LOG_ERROR, "%s: HDMICEC_IOC_SETLOGICALADDRESS failed !", __func__);
-    return false;
-  }
-
 #ifdef CEC_DEBUGGING
   LIB_CEC->AddLog(CEC_LOG_DEBUG, "%s - releasing previous logical address", __func__);
 #endif
-  m_bLogicalAddressRegistered = false;
-  return true;
+  return RegisterLogicalAddress(CECDEVICE_BROADCAST);
 }
 
 bool CIMXCECAdapterCommunication::RegisterLogicalAddress(const cec_logical_address address)
 {
   {
     CLockObject lock(m_mutex);
-    if (m_logicalAddress == address && m_bLogicalAddressRegistered)
+    if ((m_logicalAddress == address && m_bLogicalAddressRegistered) ||
+        (m_logicalAddress == address && address == CECDEVICE_BROADCAST))
     {
       return true;
     }
   }
+
+#ifdef CEC_DEBUGGING
+  LIB_CEC->AddLog(CEC_LOG_DEBUG, "%s: %x to %x", __func__, m_logicalAddress, address);
+#endif
 
   if (m_dev->Ioctl(HDMICEC_IOC_SETLOGICALADDRESS, (void *)address) != 0)
   {
@@ -276,10 +274,6 @@ bool CIMXCECAdapterCommunication::RegisterLogicalAddress(const cec_logical_addre
   }
 
   CLockObject lock(m_mutex);
-
-#ifdef CEC_DEBUGGING
-  LIB_CEC->AddLog(CEC_LOG_DEBUG, "%s: %x to %x", __func__, m_logicalAddress, address);
-#endif
 
   m_logicalAddress = address;
   m_bLogicalAddressRegistered = (address != CECDEVICE_BROADCAST) ? true : false;
