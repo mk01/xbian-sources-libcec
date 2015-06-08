@@ -179,13 +179,17 @@ install(FILES ${PROJECT_SOURCE_DIR}/../../include/cec.h
         DESTINATION include/libcec)
 
 # libCEC target
-add_library(cec SHARED ${CEC_SOURCES})
-install(TARGETS cec
+add_library(cecobj OBJECT ${CEC_SOURCES})
+set_property(TARGET ${cecobj} PROPERTY POSITION_INDEPENDENT_CODE 1)
+add_library(cec SHARED $<TARGET_OBJECTS:cecobj>)
+add_library(cecstatic STATIC $<TARGET_OBJECTS:cecobj>)
+set_target_properties(cecstatic PROPERTIES OUTPUT_NAME cec)
+install(TARGETS cec cecstatic
         DESTINATION ${LIB_DESTINATION})
-set_target_properties(cec PROPERTIES VERSION   ${LIBCEC_VERSION_MAJOR}.${LIBCEC_VERSION_MINOR}.${LIBCEC_VERSION_PATCH}
-                                     SOVERSION ${LIBCEC_VERSION_MAJOR})
-target_link_libraries(cec ${p8-platform_LIBRARIES})
-target_link_libraries(cec ${CMAKE_THREAD_LIBS_INIT})
+set_target_properties(cec cecstatic PROPERTIES VERSION   ${LIBCEC_VERSION_MAJOR}.${LIBCEC_VERSION_MINOR}.${LIBCEC_VERSION_PATCH}
+                                     SOVERSION ${LIBCEC_VERSION_MAJOR}.0)
+target_link_libraries(cec cecstatic ${p8-platform_LIBRARIES})
+target_link_libraries(cec cecstatic ${CMAKE_THREAD_LIBS_INIT})
 
 include(cmake/LinkPlatformSupport.cmake)
 include(cmake/DisplayPlatformSupport.cmake)

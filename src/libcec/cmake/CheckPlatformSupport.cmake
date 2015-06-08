@@ -93,12 +93,18 @@ else()
   endif()
 
   # xrandr
-  check_include_files("X11/Xlib.h;X11/Xatom.h;X11/extensions/Xrandr.h" HAVE_RANDR_HEADERS)
-  check_library_exists(Xrandr XRRGetScreenResources "" HAVE_RANDR_LIB)
-  if (HAVE_RANDR_HEADERS AND HAVE_RANDR_LIB)
-    set(LIB_INFO "${LIB_INFO}, randr")
-    list(APPEND CEC_SOURCES_PLATFORM platform/X11/randr-edid.cpp)
-    SET(HAVE_RANDR ON CACHE BOOL "xrandr supported" FORCE)
+  if (${HAVE_RANDR_API})
+    check_include_files("X11/Xlib.h;X11/Xatom.h;X11/extensions/Xrandr.h" HAVE_RANDR_HEADERS)
+    check_library_exists(Xrandr XRRGetScreenResources "" HAVE_RANDR_LIB)
+    if (HAVE_RANDR_HEADERS AND HAVE_RANDR_LIB)
+      set(LIB_INFO "${LIB_INFO}, randr")
+      list(APPEND CEC_SOURCES_PLATFORM platform/X11/randr-edid.cpp)
+      set(HAVE_RANDR 1)
+    else()
+      set(HAVE_RANDR 0)
+    endif()
+  else()
+    set(HAVE_RANDR 0)
   endif()
 
   # raspberry pi
@@ -149,6 +155,18 @@ else()
     list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_AOCEC})
   else()
     set(HAVE_AOCEC_API 0)
+  endif()
+
+  # iMX6
+  if (${HAVE_IMX_API})
+    set(LIB_INFO "${LIB_INFO}, iMX6")
+    set(HAVE_IMX_API 1)
+    set(CEC_SOURCES_ADAPTER_IMX adapter/IMX/IMXCECAdapterDetection.cpp
+                                adapter/IMX/IMXCECAdapterCommunication.cpp)
+    source_group("Source Files\\adapter\\iMX6" FILES ${CEC_SOURCES_ADAPTER_IMX})
+    list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_IMX})
+  else()
+    set(HAVE_IMX_API 0)
   endif()
 endif()
 
