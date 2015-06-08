@@ -124,22 +124,20 @@ else()
 
   # raspberry pi
   find_library(BCM_HOST bcm_host)
-  check_library_exists(${BCM_HOST} bcm_host_init "" HAVE_RPI_API)
-  if (HAVE_RPI_API)
-    find_library(RPI_VCOS vcos "${RPI_LIB_DIR}")
-    find_library(RPI_VCHIQ_ARM vchiq_arm "${RPI_LIB_DIR}")
-    include_directories(${RPI_INCLUDE_DIR} ${RPI_INCLUDE_DIR}/interface/vcos/pthreads ${RPI_INCLUDE_DIR}/interface/vmcs_host/linux)
-
-    set(LIB_INFO "${LIB_INFO}, 'RPi'")
-    # find includes files on Raspberry Pi
-    include_directories(/opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
-    list(APPEND CMAKE_REQUIRED_LIBRARIES "vcos")
-    list(APPEND CMAKE_REQUIRED_LIBRARIES "vchiq_arm")
-    set(CEC_SOURCES_ADAPTER_RPI adapter/RPi/RPiCECAdapterDetection.cpp
-                                adapter/RPi/RPiCECAdapterCommunication.cpp
-                                adapter/RPi/RPiCECAdapterMessageQueue.cpp)
-    source_group("Source Files\\adapter\\RPi" FILES ${CEC_SOURCES_ADAPTER_RPI})
-    list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_RPI})
+  if (NOT ${BCM_HOST} STREQUAL "BCM_HOST-NOTFOUND")
+    check_library_exists(${BCM_HOST} bcm_host_init "" HAVE_RPI_API)
+    if (HAVE_RPI_API)
+      set(LIB_INFO "${LIB_INFO}, 'RPi'")
+      # find includes files on Raspberry Pi
+      include_directories(/opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
+      list(APPEND CMAKE_REQUIRED_LIBRARIES "vcos")
+      list(APPEND CMAKE_REQUIRED_LIBRARIES "vchiq_arm")
+      set(CEC_SOURCES_ADAPTER_RPI adapter/RPi/RPiCECAdapterDetection.cpp
+                                  adapter/RPi/RPiCECAdapterCommunication.cpp
+                                  adapter/RPi/RPiCECAdapterMessageQueue.cpp)
+      source_group("Source Files\\adapter\\RPi" FILES ${CEC_SOURCES_ADAPTER_RPI})
+      list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_RPI})
+    endif()
   endif()
 
   # TDA995x
