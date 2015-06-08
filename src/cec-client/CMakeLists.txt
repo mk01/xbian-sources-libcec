@@ -13,9 +13,9 @@ include(CheckLibraryExists)
 include(CheckIncludeFiles)
 include(CheckCXXCompilerFlag)
 
-check_cxx_compiler_flag("-std=c++11" SUPPORTS_CXX11)
+check_cxx_compiler_flag("-std=c++0x" SUPPORTS_CXX11)
 if (SUPPORTS_CXX11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif()
 
 find_package(p8-platform REQUIRED)
