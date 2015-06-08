@@ -34,6 +34,12 @@ if (HAVE_RPI_API)
   list(APPEND cec_depends ${RPI_VCOS}
                           ${RPI_VCHIQ_ARM}
                           ${RPI_BCM_HOST})
+  find_library (VCOS vcos)
+  target_link_libraries(cec ${VCOS})
+  find_library (VCHIQ_ARM vchiq_arm)
+  target_link_libraries(cec ${VCHIP_ARM})
+  find_library (BCM_HOST bcm_host)
+  target_link_libraries(cec ${BCM_HOST})
 endif()
 
 # Apple
