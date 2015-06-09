@@ -97,6 +97,7 @@ else()
     set(HAVE_RPI_API 0)
   else()
     set(HAVE_IMX_API 0)
+    set(HAVE_RPI_API 1)
   endif()  
 
   # raspberry pi
