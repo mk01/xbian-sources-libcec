@@ -107,22 +107,39 @@ else()
     set(HAVE_RANDR 0)
   endif()
 
+  # iMX6
+  if (${HAVE_IMX_API})
+    set(LIB_INFO "${LIB_INFO}, iMX6")
+    set(HAVE_IMX_API 1)
+    set(CEC_SOURCES_ADAPTER_IMX adapter/IMX/IMXCECAdapterDetection.cpp
+                                adapter/IMX/IMXCECAdapterCommunication.cpp)
+    source_group("Source Files\\adapter\\iMX6" FILES ${CEC_SOURCES_ADAPTER_IMX})
+    list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_IMX})
+    set(HAVE_RPI_API 0)
+  else()
+    set(HAVE_IMX_API 0)
+  endif()  
+
   # raspberry pi
-  find_library(BCM_HOST bcm_host)
-  if (NOT ${BCM_HOST} STREQUAL "BCM_HOST-NOTFOUND")
-    check_library_exists(${BCM_HOST} bcm_host_init "" HAVE_RPI_API)
-    if (HAVE_RPI_API)
-      set(LIB_INFO "${LIB_INFO}, 'RPi'")
-      # find includes files on Raspberry Pi
-      include_directories(/opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
-      list(APPEND CMAKE_REQUIRED_LIBRARIES "vcos")
-      list(APPEND CMAKE_REQUIRED_LIBRARIES "vchiq_arm")
-      set(CEC_SOURCES_ADAPTER_RPI adapter/RPi/RPiCECAdapterDetection.cpp
-                                  adapter/RPi/RPiCECAdapterCommunication.cpp
-                                  adapter/RPi/RPiCECAdapterMessageQueue.cpp)
-      source_group("Source Files\\adapter\\RPi" FILES ${CEC_SOURCES_ADAPTER_RPI})
-      list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_RPI})
-    endif()
+  if (HAVE_RPI_API)
+    find_library(RPI_BCM_HOST bcm_host "${RPI_LIB_DIR}")
+    check_library_exists(bcm_host bcm_host_init "${RPI_LIB_DIR}" HAVE_RPI_API)
+  endif()
+  if (HAVE_RPI_API)
+    find_library(RPI_VCOS vcos "${RPI_LIB_DIR}")
+    find_library(RPI_VCHIQ_ARM vchiq_arm "${RPI_LIB_DIR}")
+    include_directories(${RPI_INCLUDE_DIR} ${RPI_INCLUDE_DIR}/interface/vcos/pthreads ${RPI_INCLUDE_DIR}/interface/vmcs_host/linux)
+
+    set(LIB_INFO "${LIB_INFO}, 'RPi'")
+    # find includes files on Raspberry Pi
+    include_directories(/opt/vc/include /opt/vc/include/interface/vcos/pthreads /opt/vc/include/interface/vmcs_host/linux)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES "vcos")
+    list(APPEND CMAKE_REQUIRED_LIBRARIES "vchiq_arm")
+    set(CEC_SOURCES_ADAPTER_RPI adapter/RPi/RPiCECAdapterDetection.cpp
+                                adapter/RPi/RPiCECAdapterCommunication.cpp
+                                adapter/RPi/RPiCECAdapterMessageQueue.cpp)
+    source_group("Source Files\\adapter\\RPi" FILES ${CEC_SOURCES_ADAPTER_RPI})
+    list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_RPI})
   endif()
 
   # TDA995x
@@ -158,17 +175,7 @@ else()
     set(HAVE_AOCEC_API 0)
   endif()
 
-  # iMX6
-  if (${HAVE_IMX_API})
-    set(LIB_INFO "${LIB_INFO}, iMX6")
-    set(HAVE_IMX_API 1)
-    set(CEC_SOURCES_ADAPTER_IMX adapter/IMX/IMXCECAdapterDetection.cpp
-                                adapter/IMX/IMXCECAdapterCommunication.cpp)
-    source_group("Source Files\\adapter\\iMX6" FILES ${CEC_SOURCES_ADAPTER_IMX})
-    list(APPEND CEC_SOURCES ${CEC_SOURCES_ADAPTER_IMX})
-  else()
-    set(HAVE_IMX_API 0)
-  endif()
+
 endif()
 
 # rt
