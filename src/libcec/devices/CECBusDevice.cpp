@@ -1024,15 +1024,17 @@ bool CCECBusDevice::ActivateSource(uint64_t iDelay /* = 0 */)
   if (iDelay == 0)
   {
     /** some AVRs fail to be powered up by the TV when it powers up. power up the AVR explicitly */
-    if (m_iLogicalAddress != CECDEVICE_AUDIOSYSTEM)
+    /*if (m_iLogicalAddress != CECDEVICE_AUDIOSYSTEM)
     {
       CCECBusDevice* audioSystem(m_processor->GetDevice(CECDEVICE_AUDIOSYSTEM));
       if (audioSystem && audioSystem->IsPresent() && audioSystem->GetPowerStatus(m_iLogicalAddress) != CEC_POWER_STATUS_ON)
       {
         LIB_CEC->AddLog(CEC_LOG_DEBUG, "powering up the AVR");
         audioSystem->PowerOn(m_iLogicalAddress);
+
+        audioSystem->m_waitForResponse->Wait(CEC_OPCODE_DEVICE_VENDOR_ID, 10000);
       }
-    }
+    }*/
 
     LIB_CEC->AddLog(CEC_LOG_DEBUG, "sending active source message for '%s'", ToString(m_iLogicalAddress));
     bReturn = m_handler->ActivateSource();
