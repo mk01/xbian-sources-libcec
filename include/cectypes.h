@@ -321,12 +321,7 @@ namespace CEC {
 /*!
  * Mimimum client version
  */
-#define CEC_MIN_LIB_VERSION          2
-
-/*!
- * libCEC's major version number
- */
-#define CEC_LIB_VERSION_MAJOR        3
+#define CEC_MIN_LIB_VERSION          3
 
 #define MSGSTART                     0xFF
 #define MSGEND                       0xFE
