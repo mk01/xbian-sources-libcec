@@ -624,3 +624,8 @@ bool CLibCEC::AudioEnable(bool enable)
       m_client->AudioEnable(enable) :
       false;
 }
+
+bool CLibCEC::TransmitSystemAudioModeRequest(void)
+{
+  return m_client ? m_client->TransmitSystemAudioModeRequest() : false;
+}

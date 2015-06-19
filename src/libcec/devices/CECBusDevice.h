@@ -201,6 +201,7 @@ namespace CEC
 
     void                          SetActiveSourceSent(bool setto = true);
     bool                          ActiveSourceSent(void) const;
+    virtual bool                  TransmitSystemAudioModeRequest(const cec_logical_address initiator);
 
            CCECAudioSystem *      AsAudioSystem(void);
     static CCECAudioSystem *      AsAudioSystem(CCECBusDevice *device);

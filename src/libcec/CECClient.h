@@ -298,6 +298,7 @@ namespace CEC
     virtual void                  RescanActiveDevices(void);
     virtual bool                  IsLibCECActiveSource(void);
     bool                          AudioEnable(bool enable);
+    virtual bool                  TransmitSystemAudioModeRequest(void);
 
     // configuration
     virtual bool                  GetCurrentConfiguration(libcec_configuration &configuration);
