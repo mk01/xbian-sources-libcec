@@ -194,6 +194,8 @@ namespace CEC
     void                          SignalOpcode(cec_opcode opcode);
     bool                          WaitForOpcode(cec_opcode opcode);
 
+    virtual bool                  TransmitSystemAudioModeRequest(const cec_logical_address initiator);
+
            CCECAudioSystem *      AsAudioSystem(void);
     static CCECAudioSystem *      AsAudioSystem(CCECBusDevice *device);
            CCECPlaybackDevice *   AsPlaybackDevice(void);

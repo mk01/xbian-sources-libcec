@@ -100,6 +100,7 @@ namespace CEC
       bool PersistConfiguration(libcec_configuration *configuration);
       void RescanActiveDevices(void);
       bool IsLibCECActiveSource(void);
+      bool TransmitSystemAudioModeRequest(void);
 
       const char* ToString(const cec_menu_state state)         { return CCECTypeUtils::ToString(state); }
       const char* ToString(const cec_version version)          { return CCECTypeUtils::ToString(version); }
