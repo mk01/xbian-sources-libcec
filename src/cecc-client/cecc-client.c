@@ -332,7 +332,7 @@ static int cec_process_command_scan(const char* data)
     activeSource = g_iface.get_active_source(g_iface.connection);
     for (iPtr = 0; iPtr < 16; iPtr++)
     {
-      if (addresses.addresses[iPtr])
+      if (addresses.addresses & (1 << iPtr))
       {
         cec_menu_language lang;
         uint64_t iVendorId        = g_iface.get_device_vendor_id(g_iface.connection, (cec_logical_address)iPtr);
