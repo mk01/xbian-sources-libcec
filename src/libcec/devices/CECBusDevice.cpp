@@ -44,6 +44,7 @@
 #include "implementations/RLCommandHandler.h"
 #include "implementations/RHCommandHandler.h"
 #include "implementations/AQCommandHandler.h"
+#include "implementations/GRCommandHandler.h"
 #include "LibCEC.h"
 #include "CECTypeUtils.h"
 #include "platform/util/timeutils.h"
@@ -220,6 +221,9 @@ bool CCECBusDevice::ReplaceHandler(bool bActivateSource /* = true */)
           break;
         case CEC_VENDOR_SHARP:
           m_handler = new CAQCommandHandler(this, iTransmitTimeout, iTransmitWait, iTransmitRetries, iActiveSourcePending);
+          break;
+        case CEC_VENDOR_GRUNDIG:
+          m_handler = new CGRCommandHandler(this, iTransmitTimeout, iTransmitWait, iTransmitRetries, iActiveSourcePending);
           break;
         default:
           m_handler = new CCECCommandHandler(this, iTransmitTimeout, iTransmitWait, iTransmitRetries, iActiveSourcePending);
