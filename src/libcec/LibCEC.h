@@ -35,9 +35,11 @@
 #include "env.h"
 #include <string>
 #include "cec.h"
-#include "platform/util/buffer.h"
+#include <p8-platform/util/buffer.h>
 #include "CECTypeUtils.h"
 #include <memory>
+
+#define CEC_PROCESSOR_SIGNAL_WAIT_TIME 1000
 
 namespace CEC
 {
@@ -126,7 +128,7 @@ namespace CEC
 
       void AddLog(const cec_log_level level, const char *strFormat, ...);
       void AddCommand(const cec_command &command);
-      void CheckKeypressTimeout(void);
+      uint16_t CheckKeypressTimeout(void);
       void Alert(const libcec_alert type, const libcec_parameter &param);
 
       static bool IsValidPhysicalAddress(uint16_t iPhysicalAddress);
@@ -148,7 +150,7 @@ namespace CEC
 
     protected:
       int64_t                   m_iStartTime;
-      PLATFORM::CMutex          m_mutex;
+      P8PLATFORM::CMutex        m_mutex;
       CECClientPtr              m_client;
       std::vector<CECClientPtr> m_clients;
   };

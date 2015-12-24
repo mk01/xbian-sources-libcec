@@ -873,6 +873,7 @@ typedef enum cec_vendor_id
   CEC_VENDOR_SHARP          = 0x08001F,
   CEC_VENDOR_SONY           = 0x080046,
   CEC_VENDOR_BROADCOM       = 0x18C086,
+  CEC_VENDOR_SHARP2         = 0x534850,
   CEC_VENDOR_VIZIO          = 0x6B746D,
   CEC_VENDOR_BENQ           = 0x8065E9,
   CEC_VENDOR_HARMAN_KARDON  = 0x9C645E,
@@ -1490,6 +1491,8 @@ struct libcec_configuration
                                                    XXX changed meaning in 2.2.0 to not break binary compatibility. next major (3.0) release will fix it in a nicer way */
   cec_user_control_code comboKey;             /*!< key code that initiates combo keys. defaults to CEC_USER_CONTROL_CODE_F1_BLUE. CEC_USER_CONTROL_CODE_UNKNOWN to disable. added in 2.0.5 */
   uint32_t              iComboKeyTimeoutMs;   /*!< timeout until the combo key is sent as normal keypress */
+  uint32_t              iButtonRepeatRateMs;  /*!< rate at which buttons autorepeat. 0 means rely on CEC device */
+  uint32_t              iButtonReleaseDelayMs;/*!< duration after last update until a button is considered released */
 
 #ifdef __cplusplus
    libcec_configuration(void) { Clear(); }
@@ -1524,6 +1527,8 @@ struct libcec_configuration
                  cecVersion                == other.cecVersion &&
                  adapterType               == other.adapterType &&
                  iDoubleTapTimeout50Ms     == other.iDoubleTapTimeout50Ms &&
+                 iButtonRepeatRateMs       == other.iButtonRepeatRateMs &&
+                 iButtonReleaseDelayMs     == other.iButtonReleaseDelayMs &&
                  (other.clientVersion <= LIBCEC_VERSION_TO_UINT(2, 0, 4) || comboKey            == other.comboKey) &&
                  (other.clientVersion <= LIBCEC_VERSION_TO_UINT(2, 0, 4) || iComboKeyTimeoutMs  == other.iComboKeyTimeoutMs) &&
                  (other.clientVersion <  LIBCEC_VERSION_TO_UINT(2, 1, 0) || bPowerOnScreensaver == other.bPowerOnScreensaver));
@@ -1564,6 +1569,8 @@ struct libcec_configuration
     iDoubleTapTimeout50Ms =           CEC_DOUBLE_TAP_TIMEOUT_50_MS;
     comboKey =                        CEC_USER_CONTROL_CODE_STOP;
     iComboKeyTimeoutMs =              CEC_DEFAULT_COMBO_TIMEOUT_MS;
+    iButtonRepeatRateMs =             0;
+    iButtonReleaseDelayMs =           CEC_BUTTON_TIMEOUT;
 
     memset(strDeviceName, 0, 13);
     deviceTypes.Clear();

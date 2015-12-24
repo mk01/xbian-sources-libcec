@@ -35,21 +35,14 @@
 #define SWIG_FILE_WITH_INIT
 #define LIBCEC_SWIG_EXPORTS
 
-/** XXX python does a #define PLATFORM, which causes a collision with our PLATFORM namespace */
-#ifdef PLATFORM
-#define _platform_tmp PLATFORM
-#undef PLATFORM
-#endif
-
 #include "cectypes.h"
 #include "cec.h"
 #include "CECTypeUtils.h"
-#include "platform/threads/mutex.h"
-
-/** XXX python does a #define PLATFORM, which causes a collision with our PLATFORM namespace */
-#ifdef _platform_tmp
-#define PLATFORM _platform_tmp
-#undef _platform_tmp
+#include <p8-platform/threads/mutex.h>
+/** XXX only to keep the IDE happy, using the actual Python.h with the correct system version when building */
+#ifndef Py_PYTHON_H
+#include <python2.7/Python.h>
+#include <assert.h>
 #endif
 
 namespace CEC

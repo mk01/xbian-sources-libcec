@@ -41,10 +41,10 @@
 #include "CECProcessor.h"
 #include "LibCEC.h"
 #include "CECTypeUtils.h"
-#include "platform/util/util.h"
+#include <p8-platform/util/util.h>
 
 using namespace CEC;
-using namespace PLATFORM;
+using namespace P8PLATFORM;
 
 #define LIB_CEC     m_busDevice->GetProcessor()->GetLib()
 #define ToString(p) CCECTypeUtils::ToString(p)
@@ -798,7 +798,7 @@ int CCECCommandHandler::HandleUserControlRelease(const cec_command &command)
 
   CECClientPtr client = m_processor->GetClient(command.destination);
   if (client)
-    client->AddKey();
+    client->AddKey(false, true);
 
   return COMMAND_HANDLED;
 }

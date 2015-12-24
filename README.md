@@ -10,7 +10,7 @@ You can find a list of frequently asked questions on [libCEC's FAQ page] (http:/
 
 ### Prerequisites
 libCEC needs the following dependencies in order to work correctly:
-* [libplatform] (https://github.com/Pulse-Eight/platform) 1.0 or later
+* [p8-platform] (https://github.com/Pulse-Eight/platform) 2.0 or later
 * udev v151 or later
 * cdc-acm support compiled into the kernel or available as module
 * [liblockdev] (https://packages.debian.org/search?keywords=liblockdev) 1.0 or later
@@ -27,13 +27,25 @@ be (fully) auto-detected.
 * X randr development headers
 
 ### Compilation
-To compile, execute the following commands:
+To compile libCEC on a new Debian/Ubuntu installation, follow these instructions:
 ```
-mkdir build
-cd build
+apt-get update
+apt-get install cmake liblockdev1-dev libudev-dev libxrandr-dev python-dev swig
+cd
+git clone https://github.com/Pulse-Eight/platform.git
+mkdir platform/build
+cd platform/build
 cmake ..
 make
 sudo make install
+cd
+git clone https://github.com/Pulse-Eight/libcec.git
+mkdir libcec/build
+cd libcec/build
+cmake ..
+make -j4
+sudo make install
+sudo ldconfig
 ```
 
 ### Raspberry Pi
@@ -52,6 +64,27 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/CrossCompile.cmake \
       -DRPI_INCLUDE_DIR=/path/to/firmware/hardfp/opt/vc/include \
       -DRPI_LIB_DIR=/path/to/firmware/hardfp/opt/vc/lib \
       ..
+```
+
+To compile libCEC on a new Raspbian installation, follow these instructions:
+```
+apt-get update
+apt-get install cmake liblockdev1-dev libudev-dev libxrandr-dev python-dev swig
+cd
+git clone https://github.com/Pulse-Eight/platform.git
+mkdir platform/build
+cd platform/build
+cmake ..
+make
+sudo make install
+cd
+git clone https://github.com/Pulse-Eight/libcec.git
+mkdir libcec/build
+cd libcec/build
+cmake -DRPI_INCLUDE_DIR=/opt/vc/include -DRPI_LIB_DIR=/opt/vc/lib ..
+make -j4
+sudo make install
+sudo ldconfig
 ```
 
 ### Exynos
@@ -78,7 +111,7 @@ dpkg-buildpackage
 
 ### Prerequisites
 To compile libCEC on OS X, you'll need the following dependencies:
-* [libplatform] (https://github.com/Pulse-Eight/platform) 1.0 or later
+* [p8-platform] (https://github.com/Pulse-Eight/platform) 2.0 or later
 * [cmake 2.6 or better] (http://www.cmake.org/)
 * a supported C++ 11 compiler
 * xcode 3.2.6 or later
@@ -99,7 +132,7 @@ _Note:_ You may need to copy pkg.m4 to your m4 sources directory
 
 ### Prerequisites
 To compile libCEC on Windows, you'll need the following dependencies:
-* [libplatform] (https://github.com/Pulse-Eight/platform) 1.0 or later
+* [p8-platform] (https://github.com/Pulse-Eight/platform) 2.0 or later
 * [cmake 2.6 or better] (http://www.cmake.org/)
 * [Visual Studio 2013] (https://www.visualstudio.com/)
 * [Windows DDK (Driver Development Kit)] (https://msdn.microsoft.com/en-us/windows/hardware/hh852365.aspx)

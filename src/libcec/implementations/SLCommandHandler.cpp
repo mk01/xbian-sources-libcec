@@ -34,7 +34,7 @@
 #include "env.h"
 #include "SLCommandHandler.h"
 
-#include "platform/util/timeutils.h"
+#include <p8-platform/util/timeutils.h>
 #include "devices/CECBusDevice.h"
 #include "devices/CECPlaybackDevice.h"
 #include "CECProcessor.h"
@@ -42,7 +42,7 @@
 #include <stdio.h>
 
 using namespace CEC;
-using namespace PLATFORM;
+using namespace P8PLATFORM;
 
 #define SL_COMMAND_TYPE_HDDRECORDER_DISC  0x01
 #define SL_COMMAND_TYPE_VCR               0x02

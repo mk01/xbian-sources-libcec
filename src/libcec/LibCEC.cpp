@@ -41,15 +41,15 @@
 #include "devices/CECBusDevice.h"
 #include "devices/CECPlaybackDevice.h"
 #include "devices/CECTV.h"
-#include "platform/util/timeutils.h"
-#include "platform/util/util.h"
+#include <p8-platform/util/timeutils.h>
+#include <p8-platform/util/util.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "CECClient.h"
 
 using namespace CEC;
-using namespace PLATFORM;
+using namespace P8PLATFORM;
 
 CLibCEC::CLibCEC(void) :
     m_iStartTime(GetTimeMs()),
@@ -361,11 +361,17 @@ bool CLibCEC::IsValidPhysicalAddress(uint16_t iPhysicalAddress)
          iPhysicalAddress <= CEC_MAX_PHYSICAL_ADDRESS;
 }
 
-void CLibCEC::CheckKeypressTimeout(void)
+uint16_t CLibCEC::CheckKeypressTimeout(void)
 {
+  uint16_t timeout = CEC_PROCESSOR_SIGNAL_WAIT_TIME;
   // check all clients
   for (std::vector<CECClientPtr>::iterator it = m_clients.begin(); it != m_clients.end(); it++)
-    (*it)->CheckKeypressTimeout();
+  {
+    uint16_t t = (*it)->CheckKeypressTimeout();
+    if (t < timeout)
+      timeout = t;
+  }
+  return timeout;
 }
 
 void CLibCEC::AddLog(const cec_log_level level, const char *strFormat, ...)
