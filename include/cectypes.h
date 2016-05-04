@@ -1091,7 +1091,7 @@ typedef struct cec_command
    * @brief Formats a cec_command.
    * @param command The command to format.
    * @param initiator The logical address of the initiator.
-   * @param destination The logical addres of the destination.
+   * @param destination The logical address of the destination.
    * @param opcode The opcode of the command.
    * @param timeout The transmission timeout.
    */
@@ -1487,7 +1487,7 @@ struct libcec_configuration
   uint8_t               bMonitorOnly;         /*!< won't allocate a CCECClient when starting the connection when set (same as monitor mode). added in 1.6.3 */
   cec_version           cecVersion;           /*!< CEC spec version to use by libCEC. defaults to v1.4. added in 1.8.0 */
   cec_adapter_type      adapterType;          /*!< type of the CEC adapter that we're connected to. added in 1.8.2 */
-  uint8_t               iDoubleTapTimeout50Ms;  /*!< prevent double taps withing this timeout, in units of 50ms. defaults to 200ms (value: 4). added in 2.0.0,
+  uint8_t               iDoubleTapTimeout50Ms;  /*!< prevent double taps within this timeout, in units of 50ms. defaults to 200ms (value: 4). added in 2.0.0,
                                                    XXX changed meaning in 2.2.0 to not break binary compatibility. next major (3.0) release will fix it in a nicer way */
   cec_user_control_code comboKey;             /*!< key code that initiates combo keys. defaults to CEC_USER_CONTROL_CODE_F1_BLUE. CEC_USER_CONTROL_CODE_UNKNOWN to disable. added in 2.0.5 */
   uint32_t              iComboKeyTimeoutMs;   /*!< timeout until the combo key is sent as normal keypress */
@@ -1527,8 +1527,8 @@ struct libcec_configuration
                  cecVersion                == other.cecVersion &&
                  adapterType               == other.adapterType &&
                  iDoubleTapTimeout50Ms     == other.iDoubleTapTimeout50Ms &&
-                 iButtonRepeatRateMs       == other.iButtonRepeatRateMs &&
-                 iButtonReleaseDelayMs     == other.iButtonReleaseDelayMs &&
+                 (other.clientVersion <  LIBCEC_VERSION_TO_UINT(3, 1, 0) || iButtonRepeatRateMs   == other.iButtonRepeatRateMs) &&
+                 (other.clientVersion <  LIBCEC_VERSION_TO_UINT(3, 1, 0) || iButtonReleaseDelayMs == other.iButtonReleaseDelayMs) &&
                  (other.clientVersion <= LIBCEC_VERSION_TO_UINT(2, 0, 4) || comboKey            == other.comboKey) &&
                  (other.clientVersion <= LIBCEC_VERSION_TO_UINT(2, 0, 4) || iComboKeyTimeoutMs  == other.iComboKeyTimeoutMs) &&
                  (other.clientVersion <  LIBCEC_VERSION_TO_UINT(2, 1, 0) || bPowerOnScreensaver == other.bPowerOnScreensaver));

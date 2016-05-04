@@ -14,8 +14,8 @@
 #       HAVE_DRM_EDID_PARSER      1 if DRM EDID parsing is supported
 #
 
-set(RPI_LIB_DIR     "" CACHE STRING "Path to Rapsberry Pi libraries")
-set(RPI_INCLUDE_DIR "" CACHE STRING "Path to Rapsberry Pi headers")
+set(RPI_LIB_DIR     "" CACHE STRING "Path to Raspberry Pi libraries")
+set(RPI_INCLUDE_DIR "" CACHE STRING "Path to Raspberry Pi headers")
 
 set(PLATFORM_LIBREQUIRES "")
 
@@ -63,8 +63,10 @@ else()
   set(LIB_INFO "${LIB_INFO}, features: P8_USB")
 
   # always try DRM on Linux if other methods fail
-  set(HAVE_DRM_EDID_PARSER 1)
-  set(LIB_INFO "${LIB_INFO}, DRM")
+  if(NOT CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+    set(HAVE_DRM_EDID_PARSER 1)
+    set(LIB_INFO "${LIB_INFO}, DRM")
+  endif()
 
   # flock
   check_include_files(sys/file.h HAVE_SYS_FILE_HEADER)
@@ -134,6 +136,7 @@ else()
   # TDA995x
   check_include_files("tda998x_ioctl.h;comps/tmdlHdmiCEC/inc/tmdlHdmiCEC_Types.h" HAVE_TDA995X_API)
   if (HAVE_TDA995X_API)
+    set(HAVE_TDA995X_API 1)
     set(LIB_INFO "${LIB_INFO}, TDA995x")
     set(CEC_SOURCES_ADAPTER_TDA995x adapter/TDA995x/TDA995xCECAdapterDetection.cpp
                                     adapter/TDA995x/TDA995xCECAdapterCommunication.cpp)
