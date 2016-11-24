@@ -189,7 +189,7 @@ set_target_properties(cecstatic PROPERTIES OUTPUT_NAME cec)
 install(TARGETS cec cecstatic
         DESTINATION ${LIB_DESTINATION})
 set_target_properties(cec cecstatic PROPERTIES VERSION   ${LIBCEC_VERSION_MAJOR}.${LIBCEC_VERSION_MINOR}.${LIBCEC_VERSION_PATCH}
-                                     SOVERSION ${LIBCEC_VERSION_MAJOR}.0)
+                                     SOVERSION ${LIBCEC_VERSION_MAJOR})
 target_link_libraries(cec cecstatic ${p8-platform_LIBRARIES})
 target_link_libraries(cec cecstatic ${CMAKE_THREAD_LIBS_INIT})
 
